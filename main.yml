@@ -1,0 +1,14 @@
+- name: Upgrade NXOS switch/router
+  hosts: nxos
+  gather_facts: no
+  tasks:
+  - name: create vlans on cisco ios
+    cisco.ios.ios_vlans:
+      config:
+        - name: vlan2
+          vlan_id: 2
+          state: overridden
+      state: merged
+    tags:
+      - always
+    register: _vlans_output
