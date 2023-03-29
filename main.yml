@@ -11,7 +11,7 @@
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
     vars:
       ansible_command_timeout: 1800
-    nxos_command:
+    nxos_config:
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
         prompt:
@@ -51,11 +51,10 @@
       lines:
       - "boot nxos {{download_destination}}{{download_server.file}}"
 
-  - name: Save running config into startup config (copy running-config startup-config )
-    nxos_command:
-      commands:
-        command: "copy running-config startup-config"
-        wait_for: 'Copy complete.'
+  - name: Save running config into startup config (copy running-config startup-config)
+    nxos_config:
+      lines:
+      - copy running-config startup-config
 
   - name: Reload NXOS
     nxos_command:
@@ -65,7 +64,7 @@
         answer: "{{scp_server_password}}"
   
   - name: Wait for NXOS to come up
-    ansible.builtin.wait_for_connection:
+    wait_for_connection:
       timeout: 1800
       delay: 60
       sleep: 10
