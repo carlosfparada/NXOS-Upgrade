@@ -21,6 +21,7 @@
         - "{{scp_server_password}}"
       interval: 10
     register: result
+    #no_log: true
   - name: Debug download image from SCP server
     debug:
       var: result
