@@ -25,6 +25,7 @@
         answer:
         - 'y'
         - "{{scp_server_password}}"
+      interval: 10
     register: result
   - name: Debug download image from SCP server
     debug:
