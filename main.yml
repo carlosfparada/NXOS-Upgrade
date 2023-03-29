@@ -43,9 +43,9 @@
       backup: yes
 
   - name: Set the new image as boot config (boot nxos bootflash:nxos.9.3.6.bin)
+    vars:
+      ansible_command_timeout: 600
     nxos_config:
-      vars:
-        ansible_command_timeout: 600
       lines:
       - "boot nxos {{download_destination}}{{download_server.file}}"
 
