@@ -20,7 +20,7 @@
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
         prompt:
-        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)\? \[n\]"
+        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)? \[n\]"
         - "{{download_server.user}}@{{download_server.host}}'s password:"
         answer:
         - 'y'
