@@ -6,13 +6,18 @@
   - vars/vault.yml
   tasks:
  
+  - name: Debug command
+    debug:
+      msg: "copy {{download_source}} {{download_destination}} vrf management"
+
   # e.g. copy scp://root@172.16.1.45/nxos.10.2.5.bin bootflash: vrf management
   - name: Download image from scp server
     vars:
       ansible_command_timeout: 3600
     nxos_command:
       commands:
-      - command: "copy {{download_source}} {{download_destination}} vrf management"
+#      - command: "copy {{download_source}} {{download_destination}} vrf management"
+      - command: "copy bootflash:poap_retry_debugs.log bootflash:poap_retry_debugs.log2"
         prompt:
         - 'Warning: There is already a file existing with this name. Do you want to overwrite (y/n)?[n]'
         - "{{download_server.user}}@{{download_server.host}}'s password:"
