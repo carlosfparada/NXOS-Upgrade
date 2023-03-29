@@ -38,7 +38,8 @@
     debug:
       var: result
   - name: Assert that file is there
-    that: "{{download_server.file}} in result.stdout"
+    assert:
+      that: "{{download_server.file}} in result.stdout"
 
   # boot nxos bootflash:nxos.9.3.6.bin
   - name: Set the new image as boot config
