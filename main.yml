@@ -5,12 +5,6 @@
   - vars/main.yml
   - vars/vault.yml
   tasks:
- 
-  - name: Debug command
-    debug:
-      msg:
-      - "copy {{download_source}} {{download_destination}} vrf management"
-      - "Pass: {{scp_server_password}}"
 
   # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
   - name: Download image from scp server
