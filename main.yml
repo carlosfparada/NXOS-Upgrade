@@ -42,6 +42,7 @@
     debug:
       var: result
 
+  # reload
   - name: Reload NXOS
     nxos_command:
       commands:
@@ -49,7 +50,7 @@
         prompt: 'This command will reboot the system. (y/n)?'
         answer: "{{scp_server_password}}"
   
-  - name: Wait for NXOS to boot
+  - name: Wait for NXOS to come up
     ansible.builtin.wait_for_connection:
       timeout: 900
       delay: 60
