@@ -7,7 +7,7 @@
   tasks:
  
   # e.g. copy scp://root@172.16.1.45/nxos.10.2.5.bin bootflash: vrf management
-  - name: Download image from SCP server
+  - name: Download image from scp server
     vars:
       ansible_command_timeout: 3600
     nxos_command:
@@ -24,15 +24,22 @@
     debug:
       var: result
  
-  # - name: Check File is there
-  #   nxos_command:
-  #     commands:
-  #     - "copy running-config startup-config"
-  #   register: result
-  # - name: Debug
-  #   debug:
-  #     var: result
-  
+  - name: Check whether image file is there
+    nxos_command:
+      commands:
+      - "dir"
+    register: result
+  - name: Debug
+    debug:
+      var: result
+  - name: Assert that file is there
+    that: "{{download_server.file}} in result.stdout"
+
+  # boot nxos bootflash:nxos.9.3.6.bin
+  - name: Set the new image as boot config
+    nxos_config:
+      lines: "boot nxos {{download_destination}}{{download_server.file}}"
+
   # copy running-config startup-config 
   - name: Save running config into startup config
     nxos_command:
@@ -57,20 +64,3 @@
       timeout: 3600
       delay: 60
       sleep: 10
-
-
-
-
-#nxos_command
-
-# copy running-config startup-config
-
-# reload
-
-#  - name: Dowload new image from SCP download_server
-#    nxos_config:
-
-#nxos_config
-# boot nxos bootflash:nxos.9.3.6.bin
-
-# boot nxos bootflash:/nxos.10.3.6.bin
