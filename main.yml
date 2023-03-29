@@ -6,8 +6,9 @@
   - vars/vault.yml
   tasks:
 
-  # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
-  - name: Download image from scp server
+  
+  - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
+    # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
     vars:
       ansible_command_timeout: 3600
     nxos_command:
@@ -19,9 +20,8 @@
         answer:
         - 'y'
         - "{{scp_server_password}}"
-      interval: 10
-    register: result
     #no_log: true
+    register: result
   - name: Debug download image from SCP server
     debug:
       var: result
@@ -38,8 +38,11 @@
     assert:
       that: "'{{download_server.file}}' in result.stdout[0]"
 
-  # boot nxos bootflash:nxos.9.3.6.bin
-  - name: Set the new image as boot config
+  - name: Backup current configuration
+    nxos_config:
+      backup: yes
+
+  - name: Set the new image as boot config (boot nxos bootflash:nxos.9.3.6.bin)
     nxos_config:
       lines: "boot nxos {{download_destination}}{{download_server.file}}"
 
