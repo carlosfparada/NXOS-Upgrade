@@ -1,4 +1,5 @@
-new_version: 10.2(5)
+#new_version: 10.2(5)
+new_version: 9.3(6)
 
 download_server:
   host: 172.16.1.45
