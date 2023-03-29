@@ -1,14 +1,69 @@
-- name: Upgrade NXOS switch/router
+- name: Upgrade Cisco NXOS
   hosts: nxos
   gather_facts: no
+  vars_files:
+  - vars/main.yml
+  - vars/vault.yml
   tasks:
-  - name: create vlans on cisco ios
-    cisco.ios.ios_vlans:
-      config:
-        - name: vlan2
-          vlan_id: 2
-          state: overridden
-      state: merged
-    tags:
-      - always
-    register: _vlans_output
+ 
+  # e.g. copy scp://root@172.16.1.45/nxos.10.2.5.bin bootflash: vrf management
+  - name: Download image from SCP server
+    nxos_command:
+      commands:
+      - command: "copy {{new_version_source}} {{new_version_destination}} vrf management"
+        prompt: "{{new_version_server.user}}@{{new_version_server.host}}'s password:"
+        answer: "{{scp_server_password}}"
+    register: result
+  - name: Debug download image from SCP server
+    debug:
+      var: result
+ 
+  # - name: Check File is there
+  #   nxos_command:
+  #     commands:
+  #     - "copy running-config startup-config"
+  #   register: result
+  # - name: Debug
+  #   debug:
+  #     var: result
+  
+  # copy running-config startup-config 
+  - name: Save running config into startup config
+    nxos_command:
+      commands:
+        command: "copy running-config startup-config"
+        wait_for: 'Copy complete.'
+    register: result
+  - name: Debug save running config into startup config
+    debug:
+      var: result
+
+  - name: Reload NXOS
+    nxos_command:
+      commands:
+      - command: reload
+        prompt: 'This command will reboot the system. (y/n)?'
+        answer: "{{scp_server_password}}"
+  
+  - name: Wait for NXOS to boot
+    ansible.builtin.wait_for_connection:
+      timeout: 900
+      delay: 60
+      sleep: 10
+
+
+
+
+#nxos_command
+
+# copy running-config startup-config
+
+# reload
+
+#  - name: Dowload new image from SCP download_server
+#    nxos_config:
+
+#nxos_config
+# boot nxos bootflash:nxos.9.3.6.bin
+
+# boot nxos bootflash:/nxos.10.3.6.bin
