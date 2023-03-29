@@ -5,6 +5,6 @@ download_server:
   user: root
   path: /root/nxos.10.2.5.bin
 
-download_source: "scp://{{new_version_server.user}}@{{new_version_server.host}}{{new_version_server.path}}"
+download_source: "scp://{{download_server.user}}@{{download_server.host}}{{download_server.path}}"
 
 download_destination: "bootflash:"
