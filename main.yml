@@ -6,7 +6,14 @@
   - vars/vault.yml
   tasks:
 
-  
+  - name: Check currently running version
+    nxos_facts:
+      gather_subset: all
+    register: result_facts
+  - name: Debug
+    debug:
+      var: result_facts
+
   - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
     vars:
