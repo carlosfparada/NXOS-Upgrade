@@ -85,8 +85,6 @@
       - "Current Version: {{ansible_net__os}}"
       - "New Version: {{new_version}}"
 
-
-
   - name: Check currently running version
     nxos_facts:
       gather_subset: all
