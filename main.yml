@@ -23,7 +23,7 @@
   - name: Check whether image file is already there
     nxos_command:
       commands:
-      - "dir"
+      - dir
     register: result_dir
 
   - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
