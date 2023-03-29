@@ -17,6 +17,7 @@
         answer:
         - y
         - "{{scp_server_password}}"
+        timeout: 600
     register: result
   - name: Debug download image from SCP server
     debug:
