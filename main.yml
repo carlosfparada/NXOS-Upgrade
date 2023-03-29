@@ -9,7 +9,7 @@
   # e.g. copy scp://root@172.16.1.45/nxos.10.2.5.bin bootflash: vrf management
   - name: Download image from SCP server
     vars:
-      ansible_command_timeout: 900
+      ansible_command_timeout: 3600
     nxos_command:
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
@@ -54,7 +54,7 @@
   
   - name: Wait for NXOS to come up
     ansible.builtin.wait_for_connection:
-      timeout: 900
+      timeout: 3600
       delay: 60
       sleep: 10
 
