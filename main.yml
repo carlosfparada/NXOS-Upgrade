@@ -20,13 +20,13 @@
     assert: 
       that: "ansible_net__os != new_version"
 
-  - name: Check whether image file is already there
+  - name: Get bootflash files to check whether image file is already there
     nxos_command:
       commands:
       - dir
     register: result_dir
 
-  - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
+  - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
     nxos_config:
       commands:
