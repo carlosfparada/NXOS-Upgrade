@@ -12,12 +12,12 @@
     nxos_facts:
       gather_subset: all
     register: result_facts
-  - name: Check upgrade is needed
+  - name: Check whether the upgrade is needed
     debug:
       msg:
       - "Current Version: {{ansible_net__os}}"
       - "New Version: {{new_version}}"
-  - name: Asset that new version is different than old version
+  - name: Assert that new version is different than old version
     assert: 
       that: "ansible_net__os != new_version"
 
@@ -26,12 +26,8 @@
     nxos_config:
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
-        prompt:
-        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)?[n]"
-        - "{{download_server.user}}@{{download_server.host}}'s password:"
-        answer:
-        - 'y'
-        - "{{scp_server_password}}"
+        prompt: "{{download_server.user}}@{{download_server.host}}'s password:"
+        answer: "{{scp_server_password}}"
     #no_log: true
     register: result_download
   - name: Debug download image from SCP server
