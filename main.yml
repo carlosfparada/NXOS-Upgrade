@@ -21,46 +21,40 @@
         - 'y'
         - "{{scp_server_password}}"
     #no_log: true
-    register: result
+    register: result_download
   - name: Debug download image from SCP server
     debug:
-      var: result
+      var: result_download
  
   - name: Check whether image file is there
     nxos_command:
       commands:
       - "dir"
-    register: result
+    register: result_dir
   - name: Debug
     debug:
-      var: result
+      var: result_dir
   - name: Assert that file is there
     assert:
-      that: "'{{download_server.file}}' in result.stdout[0]"
+      that: "'{{download_server.file}}' in result_dir.stdout[0]"
 
   - name: Backup current configuration
     nxos_config:
       backup: yes
 
-  - name: Set the new image as boot config (boot nxos bootflash:nxos.9.3.6.bin)
+  - name: Set the new image as boot config (boot nxos {{download_destination}}{{download_server.file}})
     vars:
       ansible_command_timeout: 600
     nxos_config:
       lines:
       - "boot nxos {{download_destination}}{{download_server.file}}"
 
-  # copy running-config startup-config 
-  - name: Save running config into startup config
+  - name: Save running config into startup config (copy running-config startup-config )
     nxos_command:
       commands:
         command: "copy running-config startup-config"
         wait_for: 'Copy complete.'
-    register: result
-  - name: Debug save running config into startup config
-    debug:
-      var: result
 
-  # reload
   - name: Reload NXOS
     nxos_command:
       commands:
@@ -78,3 +72,10 @@
     ios_ping:
       dest: "{{download_server.host}}"
 
+  - name: Check currently running version
+    nxos_facts:
+      gather_subset: all
+    register: result_facts
+  - name: Debug
+    debug:
+      var: result_facts
