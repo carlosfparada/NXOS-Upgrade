@@ -20,7 +20,7 @@
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
         prompt:
-        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)?"
+        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)\? \[n\]"
         - "{{download_server.user}}@{{download_server.host}}'s password:"
         answer:
         - 'y'
@@ -72,3 +72,8 @@
       timeout: 3600
       delay: 60
       sleep: 10
+
+  - name: Smoke test (ping SCP server)
+    ios_ping:
+      dest: "{{download_server.host}}"
+
