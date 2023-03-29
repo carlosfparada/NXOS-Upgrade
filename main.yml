@@ -1,6 +1,8 @@
 - name: Upgrade Cisco NXOS
   hosts: nxos
   gather_facts: no
+  vars:
+    ansible_command_timeout: 1800  
   vars_files:
   - vars/main.yml
   - vars/vault.yml
@@ -16,8 +18,6 @@
 
   - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
-    vars:
-      ansible_command_timeout: 1800
     nxos_config:
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
@@ -34,8 +34,6 @@
       var: result_download
  
   - name: Check whether image file is there
-    vars:
-      ansible_command_timeout: 300
     nxos_command:
       commands:
       - "dir"
@@ -52,8 +50,6 @@
       backup: yes
 
   - name: Set the new image as boot config (boot nxos {{download_destination}}{{download_server.file}})
-    vars:
-      ansible_command_timeout: 600
     nxos_config:
       lines:
       - "boot nxos {{download_destination}}{{download_server.file}}"
