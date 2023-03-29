@@ -12,9 +12,14 @@
     nxos_facts:
       gather_subset: all
     register: result_facts
-  - name: Debug
+  - name: Check upgrade is needed
     debug:
-      var: result_facts
+      msg:
+      - "Current Version: {{ansible_net__os}}"
+      - "New Version: {{new_version}}"
+  - name: Asset that new version is different than old version
+    assert: 
+      that: "ansible_net__os != new_version"
 
   - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
@@ -22,7 +27,7 @@
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
         prompt:
-        - "Warning: There is already a file existing with this name. Do you want to overwrite"
+        - "Warning: There is already a file existing with this name. Do you want to overwrite (y/n)?[n]"
         - "{{download_server.user}}@{{download_server.host}}'s password:"
         answer:
         - 'y'
