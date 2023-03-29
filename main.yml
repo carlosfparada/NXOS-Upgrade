@@ -11,15 +11,20 @@
   - name: Check currently running version
     nxos_facts:
       gather_subset: all
-    register: result_facts
   - name: Check whether the upgrade is needed
     debug:
       msg:
       - "Current Version: {{ansible_net__os}}"
       - "New Version: {{new_version}}"
-  - name: Assert that new version is different than old version
+  - name: Assert that upgrade is needed (new version is different than current version)
     assert: 
       that: "ansible_net__os != new_version"
+
+  - name: Check whether image file is already there
+    nxos_command:
+      commands:
+      - "dir"
+    register: result_dir
 
   - name: Download image from scp server (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
@@ -29,19 +34,13 @@
         prompt: "{{download_server.user}}@{{download_server.host}}'s password:"
         answer: "{{scp_server_password}}"
     #no_log: true
-    register: result_download
-  - name: Debug download image from SCP server
-    debug:
-      var: result_download
+    when: not download_server.file in result_dir.stdout[0]
  
   - name: Check whether image file is there
     nxos_command:
       commands:
       - "dir"
     register: result_dir
-  - name: Debug
-    debug:
-      var: result_dir
   - name: Assert that file is there
     assert:
       that: "'{{download_server.file}}' in result_dir.stdout[0]"
@@ -65,7 +64,7 @@
       commands:
       - command: reload
         prompt: 'This command will reboot the system. (y/n)?'
-        answer: "{{scp_server_password}}"
+        answer: y
   
   - name: Wait for NXOS to come up
     wait_for_connection:
@@ -80,7 +79,23 @@
   - name: Check currently running version
     nxos_facts:
       gather_subset: all
-    register: result_facts
-  - name: Debug
+  - name: Check that upograde is needed (new version is different than current version)
     debug:
-      var: result_facts
+      msg:
+      - "Current Version: {{ansible_net__os}}"
+      - "New Version: {{new_version}}"
+
+
+
+  - name: Check currently running version
+    nxos_facts:
+      gather_subset: all
+  - name: Check whether the upgrade succeeded
+    debug:
+      msg:
+      - "Current Version: {{ansible_net__os}}"
+      - "Upgraded Version: {{new_version}}"
+  - name: Assert that upgrade was successful (current version is the intended new version)
+    assert: 
+      that: "ansible_net__os == new_version"
+
