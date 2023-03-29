@@ -27,6 +27,8 @@
       var: result_download
  
   - name: Check whether image file is there
+    vars:
+      ansible_command_timeout: 300
     nxos_command:
       commands:
       - "dir"
