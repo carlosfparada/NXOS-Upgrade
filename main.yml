@@ -67,8 +67,10 @@
     nxos_command:
       commands:
       - command: reload
-        prompt: 'This command will reboot the system'
-        answer: y
+        prompt:
+        - 'This command will reboot the system'
+        answer:
+        - y
     ignore_errors: yes
   
   - name: Reset the TCP connection
