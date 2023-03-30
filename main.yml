@@ -22,7 +22,7 @@
       that: "ansible_net__os != new_version"
 
   - name: Store current version
-    set_stats:
+    set_fact:
       initial_version: ansible_net__os
 
   - name: Check if the new image file is already in {{download_destination}}
