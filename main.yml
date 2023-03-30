@@ -36,8 +36,12 @@
     nxos_command:
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
-        prompt: "{{download_server.user}}@{{download_server.host}}'s password:"
-        answer: "{{scp_server_password}}"
+        prompt:
+        - "Are you sure you want to continue connecting"
+        - "password:"
+        answer:
+        - yes
+        - "{{scp_server_password}}"
     #no_log: true
     when: not download_server.file in result_dir.stdout[0]
   - name: Check whether image file is in {{download_destination}}
