@@ -40,7 +40,7 @@
         - 'Are you sure you want to continue connecting'
         - 'password:'
         answer:
-        - 'yes'
+        - yes
         - "{{scp_server_password}}"
     #no_log: true
     when: not download_server.file in result_dir.stdout[0]
