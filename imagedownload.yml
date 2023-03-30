@@ -1,0 +1,37 @@
+- name: Download images for Cisco NXOS
+  hosts: nxos
+  gather_facts: no
+  vars:
+    ansible_command_timeout: 900
+    initial_version: ''
+  vars_files:
+  - vars/main.yml
+  - vars/vault.yml
+  tasks:
+
+  - name: Check if the new image file is already in {{download_destination}}
+    nxos_command:
+      commands:
+      - dir
+    register: result_dir
+  - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
+    # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
+    nxos_command:
+      commands:
+      - command: "copy {{download_source}} {{download_destination}} vrf management"
+        prompt:
+        - 'Are you sure you want to continue connecting'
+        - 'password:'
+        answer:
+        - yes
+        - "{{scp_server_password}}"
+    #no_log: true
+    when: not download_server.file in result_dir.stdout[0]
+  - name: Check whether image file is in {{download_destination}}
+    nxos_command:
+      commands:
+      - "dir"
+    register: result_dir
+  - name: Assert that file is in {{download_destination}}
+    assert:
+      that: "'{{download_server.file}}' in result_dir.stdout[0]"

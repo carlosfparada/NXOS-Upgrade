@@ -1,0 +1,33 @@
+- name: Upgrade Cisco NXOS
+  hosts: nxos
+  gather_facts: no
+  vars:
+    ansible_command_timeout: 900
+    initial_version: ''
+  vars_files:
+  - vars/main.yml
+  - vars/vault.yml
+  tasks:
+
+  - name: Set the new image as boot config (boot nxos {{download_destination}}{{download_server.file}})
+    nxos_config:
+      lines:
+      - "boot nxos {{download_destination}}{{download_server.file}}"
+
+  - name: Save running config into startup config (copy running-config startup-config)
+    nxos_config:
+      lines:
+      - copy running-config startup-config
+
+  - name: Reload NXOS
+    vars:
+      ansible_command_timeout: 60
+    nxos_reboot:
+      confirm: true
+  - name: Reset the TCP connection
+    meta: reset_connection
+
+  - name: Wait for NXOS to come up
+    wait_for_connection:
+      delay: 60
+      timeout: 1800

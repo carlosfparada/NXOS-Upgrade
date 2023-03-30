@@ -1,0 +1,27 @@
+- name: Pre-checks for Cisco NXOS upgrade
+  hosts: nxos
+  gather_facts: no
+  vars:
+    ansible_command_timeout: 900
+    initial_version: ''
+  vars_files:
+  - vars/main.yml
+  - vars/vault.yml
+  tasks:
+
+  - name: Check currently running version (initial_version)
+    nxos_facts:
+      gather_subset: all
+  - name: Check whether the upgrade is needed
+    debug:
+      msg:
+      - "Current Version: {{ansible_net__os}}"
+      - "New Version: {{new_version}}"
+  - name: Assert that upgrade is needed (new version is different than current version)
+    assert: 
+      that: "ansible_net__os != new_version"
+
+  - name: Store current version
+    set_stats:
+      data:
+        initial_version: "{{ansible_net__os}}"

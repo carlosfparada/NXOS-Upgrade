@@ -1,0 +1,36 @@
+- name: Upgrade Cisco NXOS
+  hosts: nxos
+  gather_facts: no
+  vars:
+    ansible_command_timeout: 900
+    initial_version: ''
+  vars_files:
+  - vars/main.yml
+  - vars/vault.yml
+  tasks:
+
+  - name: Check currently running version
+    nxos_facts:
+      gather_subset: all
+  - name: Check that upgrade was successful (current version is the intended new version)
+    debug:
+      msg:
+      - "Current Version: {{ansible_net__os}}"
+      - "Intended Version: {{new_version}}"
+  - name: Assert that upgrade was successful (current version is the intended new version)
+    assert: 
+      that: "ansible_net__os == new_version"
+
+  - name: Smoke tests 1 (ping SCP server)
+    nxos_ping:
+      dest: "{{download_server.host}}"
+      vrf: management
+  - name: Smoke tests 2 (ping SCP server)
+    nxos_ping:
+      dest: "{{download_server.host}}"
+      vrf: management
+    register: result_ping
+  - name: Assert smoke tests results (packet_loss = 0.00%)
+    assert:
+      that: result_ping.packet_loss == "0.00%"
+
