@@ -2,7 +2,7 @@
   hosts: nxos
   gather_facts: no
   vars:
-    ansible_command_timeout: 1800  
+    ansible_command_timeout: 3600  
   vars_files:
   - vars/main.yml
   - vars/vault.yml
@@ -69,32 +69,22 @@
   
   - name: Wait for NXOS to come up
     wait_for_connection:
-      timeout: 1800
-      delay: 60
+      timeout: 3600
       sleep: 10
 
-  - name: Smoke test (ping SCP server)
-    ios_ping:
-      dest: "{{download_server.host}}"
-
   - name: Check currently running version
     nxos_facts:
       gather_subset: all
-  - name: Check that upograde is needed (new version is different than current version)
+  - name: Check that upgrade was successful (current version is the intended new version)
     debug:
       msg:
       - "Current Version: {{ansible_net__os}}"
-      - "New Version: {{new_version}}"
-
-  - name: Check currently running version
-    nxos_facts:
-      gather_subset: all
-  - name: Check whether the upgrade succeeded
-    debug:
-      msg:
-      - "Current Version: {{ansible_net__os}}"
-      - "Upgraded Version: {{new_version}}"
+      - "Intended Version: {{new_version}}"
   - name: Assert that upgrade was successful (current version is the intended new version)
     assert: 
       that: "ansible_net__os == new_version"
 
+  - name: Smoke tests (ping SCP server)
+    nxos_ping:
+      dest: "{{download_server.host}}"
+      vrf: management
