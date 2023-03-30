@@ -65,6 +65,7 @@
       - command: reload
         prompt: 'This command will reboot the system. (y/n)?'
         answer: y
+    ignore_errors: yes
   
   - name: Wait for NXOS to come up
     wait_for_connection:
