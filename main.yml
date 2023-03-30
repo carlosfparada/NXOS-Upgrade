@@ -66,8 +66,8 @@
   - name: Reload NXOS
     vars:
       ansible_command_timeout: 60
-      nxos_reboot:
-        confirm: true
+    nxos_reboot:
+      confirm: true
   
   - name: Reset the TCP connection
     meta: reset_connection
