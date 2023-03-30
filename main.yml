@@ -64,8 +64,10 @@
       - copy running-config startup-config
 
   - name: Reload NXOS
-    cisco.nxos.nxos_reboot:
-      confirm: true
+    vars:
+      ansible_command_timeout: 60
+      nxos_reboot:
+        confirm: true
   
   - name: Reset the TCP connection
     meta: reset_connection
