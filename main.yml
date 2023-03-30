@@ -93,3 +93,10 @@
     nxos_ping:
       dest: "{{download_server.host}}"
       vrf: management
+
+  - name: Smoke tests (ping SCP server)
+    nxos_ping:
+      dest: "{{download_server.host}}"
+      vrf: management
+    register: result_ping
+    
