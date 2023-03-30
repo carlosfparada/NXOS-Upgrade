@@ -99,6 +99,6 @@
       vrf: management
     register: result_ping
   - name: Assert smoke tests results (ping SCP server)
-    devug:
+    debug:
       var: result_ping
 
