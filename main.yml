@@ -64,14 +64,8 @@
       - copy running-config startup-config
 
   - name: Reload NXOS
-    nxos_command:
-      commands:
-      - command: reload
-        prompt:
-        - 'This command will reboot the system'
-        answer:
-        - y
-    ignore_errors: yes
+    cisco.nxos.nxos_reboot:
+      confirm: true
   
   - name: Reset the TCP connection
     meta: reset_connection
