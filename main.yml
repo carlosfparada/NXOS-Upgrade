@@ -67,7 +67,7 @@
     nxos_command:
       commands:
       - command: reload
-        prompt: 'This command will reboot the system. (y/n)?'
+        prompt: 'This command will reboot the system'
         answer: y
     ignore_errors: yes
   
