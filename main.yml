@@ -2,13 +2,14 @@
   hosts: nxos
   gather_facts: no
   vars:
-    ansible_command_timeout: 3600  
+    ansible_command_timeout: 3600
+    initial_version: ''
   vars_files:
   - vars/main.yml
   - vars/vault.yml
   tasks:
 
-  - name: Check currently running version
+  - name: Check currently running version (initial_version)
     nxos_facts:
       gather_subset: all
   - name: Check whether the upgrade is needed
@@ -20,12 +21,15 @@
     assert: 
       that: "ansible_net__os != new_version"
 
-  - name: Get bootflash files to check whether image file is already there
+  - name: Store current version
+    set_stats:
+      initial_version: ansible_net__os
+
+  - name: Check if the new image file is already in {{download_destination}}
     nxos_command:
       commands:
       - dir
     register: result_dir
-
   - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
     nxos_config:
@@ -35,13 +39,12 @@
         answer: "{{scp_server_password}}"
     #no_log: true
     when: not download_server.file in result_dir.stdout[0]
- 
-  - name: Check whether image file is there
+  - name: Check whether image file is in {{download_destination}}
     nxos_command:
       commands:
       - "dir"
     register: result_dir
-  - name: Assert that file is there
+  - name: Assert that file is in {{download_destination}}
     assert:
       that: "'{{download_server.file}}' in result_dir.stdout[0]"
 
@@ -80,6 +83,7 @@
       msg:
       - "Current Version: {{ansible_net__os}}"
       - "Intended Version: {{new_version}}"
+      - "UOGRADE DONDE FROM {{initial_version}} TO {{new_version}}"
   - name: Assert that upgrade was successful (current version is the intended new version)
     assert: 
       that: "ansible_net__os == new_version"
