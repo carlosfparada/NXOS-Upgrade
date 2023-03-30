@@ -88,7 +88,6 @@
       msg:
       - "Current Version: {{ansible_net__os}}"
       - "Intended Version: {{new_version}}"
-      - "UOGRADE DONDE FROM {{initial_version}} TO {{new_version}}"
   - name: Assert that upgrade was successful (current version is the intended new version)
     assert: 
       that: "ansible_net__os == new_version"
