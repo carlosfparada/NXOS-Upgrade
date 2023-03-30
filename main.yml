@@ -24,7 +24,7 @@
   - name: Store current version
     set_stats:
       data:
-        initial_version: ansible_net__os
+        initial_version: "{{ansible_net__os}}"
 
   - name: Check if the new image file is already in {{download_destination}}
     nxos_command:
