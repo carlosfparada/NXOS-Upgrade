@@ -102,6 +102,7 @@
       dest: "{{download_server.host}}"
       vrf: management
     register: result_ping
+    
   - name: Assert smoke tests results (packet_loss = 0.00%)
     assert:
       that: result_ping.packet_loss == "0.00%"
