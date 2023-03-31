@@ -33,7 +33,7 @@
       file_pull: true
       file_system: "{{download_filesystem}}"
       local_file: "{{download_server.file}}"
-      remote_file: "{{download_server.file}}"
+      remote_file: "{{download_server.path}}{{download_server.file}}"
       remote_scp_server: "{{download_server.host}}"
       remote_scp_server_user: "{{download_server.user}}"
       remote_scp_server_password: "{{scp_server_password}}"
