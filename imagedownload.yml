@@ -9,28 +9,41 @@
   - vars/vault.yml
   tasks:
 
-  - name: Check if the new image file ({{download_server.file}}) is already in {{download_flash}}
+  - name: Check if the new image file ({{download_server.file}}) is already in {{download_filesystem}}
     nxos_command:
       commands:
-      - "dir {{download_flash}}"
+      - "dir {{download_filesystem}}"
     register: result_dir
-  - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
-    # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash:///nxos.10.2.5.bin vrf management
-    nxos_command:
-      commands:
-      - command: "copy {{download_source}} {{download_destination}} vrf management"
-        prompt:
-        - 'continue connecting'
-        - 'password'
-        answer:
-        - 'yes'
-        - "{{scp_server_password}}"
-    #no_log: true
+  # - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
+  #   # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash:///nxos.10.2.5.bin vrf management
+  #   nxos_command:
+  #     commands:
+  #     - command: "copy {{download_source}} {{download_destination}} vrf management"
+  #       prompt:
+  #       - 'continue connecting'
+  #       - 'password'
+  #       answer:
+  #       - 'yes'
+  #       - "{{scp_server_password}}"
+  #   #no_log: true
+  #   when: not download_server.file in result_dir.stdout[0]
+
+  - name: Download image from scp server, if needed
+    cisco.nxos.nxos_file_copy:
+      file_pull: true
+      file_system: "{{download_filesystem}}"
+      local_file: "{{download_server.file}}"
+      remote_file: "{{download_server.file}}"
+      remote_scp_server: "{{download_server.host}}"
+      remote_scp_server_user: "{{download_server.user}}"
+      remote_scp_server_password: "{{scp_server_password}}"
+      vrf: management
     when: not download_server.file in result_dir.stdout[0]
-  - name: Check whether image file ({{download_server.file}}) is in {{download_flash}}
+
+  - name: Check whether image file ({{download_server.file}}) is in {{download_filesystem}}
     nxos_command:
       commands:
-      - "dir {{download_flash}}"
+      - "dir {{download_filesystem}}"
     register: result_dir
   - name: Assert that file is in {{download_destination}}
     assert:
