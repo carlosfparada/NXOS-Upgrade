@@ -27,7 +27,6 @@
   #       - "{{scp_server_password}}"
   #   #no_log: true
   #   when: not download_server.file in result_dir.stdout[0]
-
   - name: Download image from scp server, if needed
     cisco.nxos.nxos_file_copy:
       file_pull: true
