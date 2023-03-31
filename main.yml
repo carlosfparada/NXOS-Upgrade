@@ -21,7 +21,7 @@
     assert: 
       that: "ansible_net__os != new_version"
 
-  - name: Store current version
+  - name: Store initial version
     set_stats:
       data:
         initial_version: "{{ansible_net__os}}"
