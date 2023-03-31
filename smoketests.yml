@@ -30,11 +30,6 @@
       dest: "{{download_server.host}}"
       vrf: management
     register: result_ping
-  - name: Set fallback version
-    set_stats:
-      data:
-        download_destination: "{{initial_image}}"
-    when: result_ping.packet_loss != "0.00%"
   - name: Assert smoke tests results (packet_loss = 0.00%)
     assert:
       that: result_ping.packet_loss == "0.00%"
