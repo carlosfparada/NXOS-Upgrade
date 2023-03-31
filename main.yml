@@ -27,10 +27,10 @@
         initial_version: "{{ansible_net__os}}"
         initial_image: "{{ansible_net_image}}"
 
-  - name: Check if the new image file is already in {{download_destination}}
+  - name: Check if the new image file ({{download_server.file}}) is already in {{download_flash}}
     nxos_command:
       commands:
-      - dir
+      - "dir {{download_flash}}"
     register: result_dir
   - name: Download image from scp server if needed (copy {{download_source}} {{download_destination}} vrf management)
     # e.g. copy scp://root@172.16.1.45/root/nxos.10.2.5.bin bootflash: vrf management
@@ -45,10 +45,10 @@
         - "{{scp_server_password}}"
     #no_log: true
     when: not download_server.file in result_dir.stdout[0]
-  - name: Check whether image file is in {{download_destination}}
+  - name: Check whether image file ({{download_server.file}}) is in {{download_flash}}
     nxos_command:
       commands:
-      - "dir"
+      - "dir {{download_flash}}"
     register: result_dir
   - name: Assert that file is in {{download_destination}}
     assert:
@@ -58,10 +58,10 @@
     nxos_config:
       backup: yes
 
-  - name: Set the new image as boot config (boot nxos {{download_destination}}{{download_server.file}})
+  - name: Set the new image as boot config (boot nxos {{download_destination}})
     nxos_config:
       lines:
-      - "boot nxos {{download_destination}}{{download_server.file}}"
+      - "boot nxos {{download_destination}}"
 
   - name: Save running config into startup config (copy running-config startup-config)
     nxos_config:

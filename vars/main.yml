@@ -10,4 +10,6 @@ download_server:
 
 download_source: "scp://{{download_server.user}}@{{download_server.host}}{{download_server.path}}{{download_server.file}}"
 
-download_destination: "bootflash:"
+download_flash: "bootflash:///"
+
+download_destination: "{{download_flash}}{{download_server.file}}"
