@@ -26,8 +26,5 @@
     set_stats:
       data:
         initial_version: "{{ansible_net__os}}"
-
-  - name: Store initial version
-    debug:
-      var: result
+        initial_image: "{{ansible_net_image}}"
 
