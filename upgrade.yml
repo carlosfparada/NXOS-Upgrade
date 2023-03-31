@@ -9,10 +9,10 @@
   - vars/vault.yml
   tasks:
 
-  - name: Set the new image as boot config (boot nxos {{download_destination}}{{download_server.file}})
+  - name: Set the new image as boot config (boot nxos {{download_destination}})
     nxos_config:
       lines:
-      - "boot nxos {{download_destination}}{{download_server.file}}"
+      - "boot nxos {{download_destination}}"
 
   - name: Save running config into startup config (copy running-config startup-config)
     nxos_config:
