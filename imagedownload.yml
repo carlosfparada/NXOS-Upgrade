@@ -20,8 +20,8 @@
       commands:
       - command: "copy {{download_source}} {{download_destination}} vrf management"
         prompt:
-        - 'Are you sure you want to continue connecting'
-        - 'password:'
+        - continue
+        - password
         answer:
         - yes
         - "{{scp_server_password}}"
