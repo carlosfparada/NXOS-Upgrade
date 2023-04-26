@@ -12,4 +12,4 @@ Get remote assistance to console into the switch locally
 Copy the software to the switch
 Change the boot variable
 Reload the switch
-Watch the switch reboot
+Watch the switch reboot 
