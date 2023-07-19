@@ -9,28 +9,44 @@
   - vars/vault.yml
   tasks:
 
-  - name: Set the new image as boot config (boot nxos {{download_destination}})
-    nxos_config:
-      lines:
-      - "boot nxos {{download_destination}}"
+  # - name: Set the new image as boot config (boot nxos {{download_destination}})
+  #   nxos_config:
+  #     lines:
+  #     - "boot nxos {{download_destination}}"
 
-  - name: Save running config into startup config (copy running-config startup-config)
-    nxos_config:
-      lines:
-      - copy running-config startup-config
+  # - name: Save running config into startup config (copy running-config startup-config)
+  #   nxos_config:
+  #     lines:
+  #     - copy running-config startup-config
 
-  - name: Reload NXOS
-    vars:
-      ansible_command_timeout: 60
-    nxos_reboot:
-      confirm: true
-  - name: Sleep for 10 seconds and continue with play
+  # - name: Reload NXOS
+  #   vars:
+  #     ansible_command_timeout: 60
+  #   nxos_reboot:
+  #     confirm: true
+  # - name: Sleep for 10 seconds and continue with play
+  #   wait_for:
+  #   timeout: 20
+  # - name: Reset the TCP connection
+  #   meta: reset_connection
+
+  # - name: Wait for NXOS to come up
+  #   wait_for_connection:
+  #     delay: 60
+  #     timeout: 1800
+
+
+  - name: Upgrade to {{new_version}} ({{download_destination}})
+    check_mode: false
+    cisco.nxos.nxos_install_os:
+      system_image_file: "{{download_destination}}"
+      issu: desired
+
+  - name: Wait for device to come back up with new image
     wait_for:
-    timeout: 20
-  - name: Reset the TCP connection
-    meta: reset_connection
-
-  - name: Wait for NXOS to come up
-    wait_for_connection:
-      delay: 60
+      port: 22
+      state: started
       timeout: 1800
+      delay: 60
+      host: '{{ inventory_hostname }}'
+
