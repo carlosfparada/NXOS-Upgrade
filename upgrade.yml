@@ -39,7 +39,7 @@
   - name: Upgrade to {{new_version}} ({{download_destination}})
     check_mode: false
     cisco.nxos.nxos_install_os:
-      system_image_file: "{{download_destination}}"
+      system_image_file: "{{download_server.file}}"
       issu: desired
 
   - name: Wait for device to come back up with new image
@@ -48,5 +48,4 @@
       state: started
       timeout: 1800
       delay: 60
-      host: '{{ inventory_hostname }}'
 
