@@ -13,6 +13,6 @@
     set_stats:
       data:
         download_destination: "{{initial_image}}"
-    when: result_ping.packet_loss != "0.00%"
+    #when: result_ping.packet_loss != "0.00%"
 
 
