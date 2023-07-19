@@ -41,9 +41,9 @@
     cisco.nxos.nxos_install_os:
       system_image_file: "{{download_server.file}}"
       issu: desired
-    environment:
-      ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: 1800
-      ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: 1800
+    # environment:
+    #   ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: 1800
+    #   ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: 1800
 
   - name: Wait for device to come back up with new image
     wait_for:
