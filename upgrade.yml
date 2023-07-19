@@ -10,15 +10,15 @@
   - vars/vault.yml
   tasks:
 
-  # - name: Set the new image as boot config (boot nxos {{download_destination}})
-  #   nxos_config:
-  #     lines:
-  #     - "boot nxos {{download_destination}}"
+  - name: Set the new image as boot config (boot nxos {{download_destination}})
+    nxos_config:
+      lines:
+      - "boot nxos {{download_destination}}"
 
-  # - name: Save running config into startup config (copy running-config startup-config)
-  #   nxos_config:
-  #     lines:
-  #     - copy running-config startup-config
+  - name: Save running config into startup config (copy running-config startup-config)
+    nxos_config:
+      lines:
+      - copy running-config startup-config
 
   # - name: Reload NXOS
   #   vars:
@@ -41,9 +41,6 @@
     cisco.nxos.nxos_install_os:
       system_image_file: "{{download_server.file}}"
       issu: desired
-    # environment:
-    #   ANSIBLE_PERSISTENT_CONNECT_TIMEOUT: 1800
-    #   ANSIBLE_PERSISTENT_COMMAND_TIMEOUT: 1800
 
   - name: Wait for device to come back up with new image
     wait_for:
