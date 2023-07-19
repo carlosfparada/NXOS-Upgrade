@@ -10,6 +10,9 @@
   - vars/vault.yml
   tasks:
 
+  - name: Reset the TCP connection
+    meta: reset_connection
+    
   - name: Check currently running version (initial_version)
     nxos_facts:
       gather_subset: all
