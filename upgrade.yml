@@ -42,6 +42,10 @@
       system_image_file: "{{download_server.file}}"
       issu: desired
 
+  - name: Wait for some time to be safe
+    wait_for:
+      timeout: 60
+
   - name: Reset the TCP connection
     meta: reset_connection
 
