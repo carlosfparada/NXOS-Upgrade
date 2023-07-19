@@ -55,5 +55,6 @@
       state: started
       timeout: 900
       delay: 60
+      host: "{{ inventory_hostname }}"
     connection: local
 
