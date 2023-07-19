@@ -36,11 +36,11 @@
   #     delay: 60
   #     timeout: 1800
 
-  - name: Upgrade to {{new_version}} ({{download_destination}})
-    check_mode: false
-    cisco.nxos.nxos_install_os:
-      system_image_file: "{{download_server.file}}"
-      issu: desired
+  # - name: Upgrade to {{new_version}} ({{download_destination}})
+  #   check_mode: false
+  #   cisco.nxos.nxos_install_os:
+  #     system_image_file: "{{download_server.file}}"
+  #     issu: desired
 
   - name: Reset the TCP connection
     meta: reset_connection
