@@ -14,15 +14,6 @@
     nxos_facts:
       gather_subset: all
     register: result
-    ignore_errors: true
-
-  - name: Reset the TCP connection
-    meta: reset_connection
-
-  - name: Check currently running version (initial_version)
-    nxos_facts:
-      gather_subset: all
-    register: result
   - name: Check whether the upgrade is needed
     debug:
       msg:
