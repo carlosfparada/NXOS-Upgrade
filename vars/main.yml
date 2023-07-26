@@ -1,11 +1,11 @@
 new_version: 10.2(5)
-#new_version: 9.3(6)
+#new_version: 9.3(11)
 
 download_server:
   host: 172.16.1.45
   user: root
   path: /root/
-#  file: nxos.9.3.6.bin
+#  file: nxos.9.3.11.bin
   file: nxos.10.2.5.bin
 
 download_source: "scp://{{download_server.user}}@{{download_server.host}}{{download_server.path}}{{download_server.file}}"
