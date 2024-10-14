@@ -36,7 +36,7 @@
       remote_scp_server: "{{download_server.host}}"
       remote_scp_server_user: "{{download_server.user}}"
       remote_scp_server_password: "{{scp_server_password}}"
-      file_pull_timeout: 900
+      file_pull_timeout: "{{ansible_command_timeout}}"
       vrf: management
     when: not download_server.file in result_dir.stdout[0]
 
