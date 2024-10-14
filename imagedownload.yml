@@ -2,7 +2,7 @@
   hosts: nxos
   gather_facts: no
   vars:
-    ansible_command_timeout: 900
+    ansible_command_timeout: 1200
     initial_version: ''
   vars_files:
   - vars/main.yml
